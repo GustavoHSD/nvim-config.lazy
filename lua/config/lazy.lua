@@ -21,8 +21,17 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", "<CMD>Oil<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
+
+vim.keymap.set("n", "<leader>e", "ié")
+
+-- Fterm keymaps
+vim.keymap.set("n", "<A-i>", function() require("FTerm").toggle() end)
+vim.keymap.set("t", "<A-i>", function() require("FTerm").toggle() end)
+vim.keymap.set("t", "<A-k>", function() require("FTerm").close() end)
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true })
+
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
@@ -51,6 +60,28 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "typescript", "typescriptreact" };
+  callback = function()
+    vim.bo.tabstop = 2
+    vim.bo.shiftwidth = 2
+    vim.bo.expandtab = true
+  end,
+})
+
+-- Salva referência do handler original
+local orig_rename = vim.lsp.handlers["textDocument/rename"]
+
+-- Substitui o handler com a lógica extra
+vim.lsp.handlers["textDocument/rename"] = function(err, result, ctx, config)
+  -- Chama o handler original
+  orig_rename(err, result, ctx, config)
+
+  -- Aguarda um pouco e salva todos os buffers
+  vim.defer_fn(function()
+    vim.cmd("wall")  -- ou use :wa
+  end, 50)
+end
 --   vim.cmd [[
 --   augroup jdtls_lsp
 --      autocmd!
@@ -71,6 +102,6 @@ require("lazy").setup({
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "modus" } },
   -- automatically check for plugin updates
-  checker = { enabled = true },
+--  checker = { enabled = true },
 })
 
