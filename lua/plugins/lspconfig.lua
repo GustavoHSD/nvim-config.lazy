@@ -262,8 +262,15 @@ return {
         }
       }))
 
+      lspconfig.kotlin_language_server.setup{
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = { "kotlin" , "kt", "kts"},
+        cmd = { os.getenv("HOME") .. "/.local/language_servers/kotlin/server/bin/kotlin-language-server" }
+      }
+
       -- TypeScript
-      lspconfig.tsserver.setup(common_config)
+      lspconfig.ts_ls.setup(common_config)
 
       -- TailwindCSS
       lspconfig.tailwindcss.setup(vim.tbl_extend("force", common_config, {
