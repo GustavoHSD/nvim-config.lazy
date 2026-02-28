@@ -175,6 +175,18 @@ return {
       -- Python
       lspconfig.pyright.setup(common_config)
 
+      -- sqlc setup
+      lspconfig.sqls.setup(vim.tbl_extend("force", common_config, {
+        filetypes = { "sql", "mysql", "plsql" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = {
+          sqls = {
+            config = vim.fn.expand("/home/gustavohsd/.config/sqls/config.yml"),
+          },
+        },
+      }))
+
       -- Java (JDTLS)
       lspconfig.jdtls.setup(vim.tbl_extend("force", common_config, {
         on_attach = jdtls_on_attach,
@@ -317,7 +329,7 @@ return {
       vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
     end
   },
-  {
+{
     "hrsh7th/nvim-cmp",
     version = false,
     event = "InsertEnter",
@@ -352,6 +364,7 @@ return {
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
         }),
 
+        -- Default sources for all files
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
           { name = "codeium" },
@@ -360,8 +373,18 @@ return {
           { name = "path" },
         }),
       })
+
+      -- [NEW] Specific setup for SQL files
+      cmp.setup.filetype({ "sql", "mysql", "plsql" }, {
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "vim-dadbod-completion" }, -- The new source
+          { name = "buffer" },
+        }),
+      })
     end
   },
+
   {
     "L3MON4D3/LuaSnip",
     version = "v2.*",

@@ -38,3 +38,5 @@ vim.opt.wildignore:append("**/dist/**")  -- Ignore dist directories
 vim.opt.lazyredraw = true  -- Don't redraw while executing macros
 vim.opt.ttyfast = true  -- Faster terminal connection
 vim.opt.synmaxcol = 200  -- Don't syntax highlight long lines 
+vim.o.autoread = true
+vim.o.updatetime = 250

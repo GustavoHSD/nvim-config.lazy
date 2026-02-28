@@ -23,6 +23,7 @@ vim.g.maplocalleader = "\\"
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", "<CMD>Oil<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
+vim.keymap.set("v", "<Leader>y", '"+y', { noremap = true, silent = true, desc = "Yank to clipboard" })
 
 vim.keymap.set("n", "<leader>e", "ié")
 
